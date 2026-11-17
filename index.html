@@ -374,7 +374,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
     <p>For more info, message <span class="contact" id="baName">Karli</span> on Facebook.</p>
   </section>
 
-  <details class="tool">
+  <details class="tool" id="baTool" hidden>
     <summary>For Brand Ambassadors: make a hostess link</summary>
     <form id="maker">
       <label for="f-host">Hostess first name
@@ -405,6 +405,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
 (function () {
   var BASE = "https://empowerandshine.github.io/beauty-dash/";
   var params = new URLSearchParams(location.search);
+  if (params.get("team") === "shine") document.getElementById("baTool").hidden = false;
   var fHost = document.getElementById("f-host"), fLink = document.getElementById("f-link"), fBa = document.getElementById("f-ba"), fMsgr = document.getElementById("f-msgr");
   if (params.get("host")) fHost.value = params.get("host");
   if (params.get("link")) fLink.value = params.get("link");
