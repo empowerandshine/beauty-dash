@@ -383,6 +383,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
       <label for="f-link">Her pop-up shopping link (any page of it works)
         <input id="f-link" type="url" value="https://redaspenlove.com/collections/mascara-eyeliner?pws=KarliJean&amp;party=NovemberVIPs" placeholder="Paste her pop-up link" autocomplete="off">
       </label>
+      <p class="small" id="linkWarn" hidden style="color:#b0306e"><b>This link doesn't include your shop code (pws=), so the buttons can't take shoppers to the right pages.</b> If it's a short link, open it in your browser, then copy the full address from the address bar (it should contain "pws=" and "party=") and paste that here.</p>
       <label for="f-ba">Your name (shown in "Get your own link")
         <input id="f-ba" type="text" value="Karli" autocomplete="off">
       </label>
@@ -571,6 +572,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
     document.querySelectorAll(".hostRef").forEach(function (el) { el.textContent = host; });
     var u = null; try { u = link ? new URL(link) : null; } catch (e) {}
     PWS = u && u.searchParams.get("pws"); PARTY = u && u.searchParams.get("party"); RAW = link;
+    document.getElementById("linkWarn").hidden = !link || !!PWS;
     var pws = PWS, party = PARTY;
     document.querySelectorAll("a[data-p]").forEach(function (a) { a.href = siteLink("/products/" + a.getAttribute("data-p")); });
     updateNail(); updateTint(); updateLash(); updateLip(); updateSkin();
