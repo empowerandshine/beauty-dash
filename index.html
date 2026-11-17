@@ -383,7 +383,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
       <label for="f-link">Her pop-up shopping link (any page of it works)
         <input id="f-link" type="url" value="https://redaspenlove.com/collections/mascara-eyeliner?pws=KarliJean&amp;party=NovemberVIPs" placeholder="Paste her pop-up link" autocomplete="off">
       </label>
-      <p class="small" id="linkWarn" hidden style="color:#b0306e"><b>This link doesn't include your shop code (pws=), so the buttons can't take shoppers to the right pages.</b> If it's a short link, open it in your browser, then copy the full address from the address bar (it should contain "pws=" and "party=") and paste that here.</p>
+      <p class="small" id="linkWarn" hidden style="color:#b0306e"><b>This link doesn't include a party or shop code, so the buttons can't take shoppers to the right pages.</b> If it's a short link, open it in your browser, then copy the full address from the address bar (it should contain "party=" or look like redaspenlove.com/party/HostessName) and paste that here.</p>
       <label for="f-ba">Your name (shown in "Get your own link")
         <input id="f-ba" type="text" value="Karli" autocomplete="off">
       </label>
@@ -414,9 +414,9 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
 
   var PWS = null, PARTY = null, RAW = "";
   function siteLink(path) {
-    if (!PWS) return RAW || "#";
+    if (!PWS && !PARTY) return RAW || "#";
     var d = new URL("https://redaspenlove.com" + path);
-    d.searchParams.set("pws", PWS); if (PARTY) d.searchParams.set("party", PARTY);
+    if (PWS) d.searchParams.set("pws", PWS); if (PARTY) d.searchParams.set("party", PARTY);
     return d.href;
   }
   function val(name) { var el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ""; }
@@ -434,7 +434,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
     document.querySelectorAll('#nailFinder input:checked').forEach(function (i) { if (i.getAttribute("data-key")) q.push([i.getAttribute("data-key"), i.value]); });
     var path = "/collections/all-nail-dashes";
     var url = siteLink(path);
-    if (PWS && q.length) { var d = new URL(url); q.forEach(function (p) { d.searchParams.append(p[0], p[1]); }); url = d.href; }
+    if ((PWS || PARTY) && q.length) { var d = new URL(url); q.forEach(function (p) { d.searchParams.append(p[0], p[1]); }); url = d.href; }
     document.getElementById("nailGo").href = url;
     document.getElementById("nailSummary").textContent = "Nail Dashes: " + nailText();
   }
@@ -572,15 +572,16 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
     document.querySelectorAll(".hostRef").forEach(function (el) { el.textContent = host; });
     var u = null; try { u = link ? new URL(link) : null; } catch (e) {}
     PWS = u && u.searchParams.get("pws"); PARTY = u && u.searchParams.get("party"); RAW = link;
-    document.getElementById("linkWarn").hidden = !link || !!PWS;
+    if (u && !PARTY) { var pm = u.pathname.match(/^\/party\/([^\/?#]+)/i); if (pm) PARTY = decodeURIComponent(pm[1]); }
+    document.getElementById("linkWarn").hidden = !link || !!(PWS || PARTY);
     var pws = PWS, party = PARTY;
     document.querySelectorAll("a[data-p]").forEach(function (a) { a.href = siteLink("/products/" + a.getAttribute("data-p")); });
     updateNail(); updateTint(); updateLash(); updateLip(); updateSkin();
     document.querySelectorAll("a.shop").forEach(function (a) {
       var c = a.getAttribute("data-c");
-      if (link && c && pws) {
+      if (link && c && (pws || party)) {
         var d = new URL("https://redaspenlove.com/collections/" + c);
-        d.searchParams.set("pws", pws); if (party) d.searchParams.set("party", party);
+        if (pws) d.searchParams.set("pws", pws); if (party) d.searchParams.set("party", party);
         a.href = d.href; a.removeAttribute("aria-disabled");
       } else if (link) { a.href = link; a.removeAttribute("aria-disabled"); }
       else { a.href = "#"; a.setAttribute("aria-disabled", "true"); }
