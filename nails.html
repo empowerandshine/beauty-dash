@@ -122,6 +122,10 @@ details.tool summary { font-family: var(--display); text-transform: uppercase; l
 .starter img { width: 120px; height: auto; border-radius: 10px; }
 .starter div { display: grid; gap: 6px; min-width: 0; }
 .starter b.tag { font-family: var(--display); text-transform: uppercase; letter-spacing: .06em; color: var(--pink-ink); font-size: 13px; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.addlist { font: inherit; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; border: 2px dashed var(--pink); background: transparent; color: var(--pink-ink); cursor: pointer; }
+.addlist.added { border-style: solid; background: var(--blush); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .starter p { margin: 0; color: var(--ink); font-size: 14px; }
 @media (max-width: 380px) { .starter { grid-template-columns: 1fr; } .starter img { width: 100%; } }
 .lesson .num, .board .num { font-family: var(--display); text-transform: uppercase; letter-spacing: .12em; font-size: 12px; color: var(--pink-ink); }
@@ -216,7 +220,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
         <div>
           <b class="tag">New to Nail Dashes? Start here</b>
           <p><b>Nail Dash Glue Application Bundle:</b> brush-on glue, a full-size file, nail primer and prep pads. It's everything you need for 10+ days of wear.</p>
-          <a class="btn" data-p="nail-dash-glue-application-bundle" href="#" target="_blank" rel="noopener">Add the starter kit</a>
+          <div class="btnrow"><a class="btn" data-p="nail-dash-glue-application-bundle" href="#" target="_blank" rel="noopener">Shop the starter kit</a><button class="addlist" type="button" data-add="Nail starter kit (glue bundle)">+ Add to my list</button></div>
         </div>
       </div>
     </div>
@@ -238,7 +242,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
       </ol>
       <p>You get good wear, and they still come off easily in 3 to 5 days. Let <span class="baFirst">Karli</span> know if you try it!</p>
       <div class="tip"><b>Want everything in one box?</b> The Hybrid Method Application Bundle ($38) has the brush-on glue, Nail Dash Tabs, a full-size file, Nail Primer and prep pads.</div>
-      <a class="btn" data-p="hybrid-method-application-bundle" href="#" target="_blank" rel="noopener">Shop the Hybrid Method bundle</a>
+      <div class="btnrow"><a class="btn" data-p="hybrid-method-application-bundle" href="#" target="_blank" rel="noopener">Shop the Hybrid Method bundle</a><button class="addlist" type="button" data-add="Hybrid Method bundle">+ Add to my list</button></div>
     </div>
   </article>
 
@@ -291,6 +295,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
         <li>Soak for 10 to 20 minutes, gently prying at the Dashes every few minutes.</li>
       </ol>
       <p>It should never hurt or take force. Having trouble? Add more oil and soak a little longer.</p>
+      <button class="addlist" type="button" data-add="Removal tool or bundle">+ Add removal tools to my list</button>
     </div>
   </article>
 
@@ -310,6 +315,13 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
         <li><b>Cuticle pusher:</b> dual-sided stainless steel, one end to push back cuticles and one for precise cleanup.</li>
         <li><b>Hand cream and hand masks:</b> hands are one of the fastest-aging areas of the body, especially in dry winter months.</li>
       </ul>
+      <p class="small"><b>Add any of these to your list:</b></p>
+      <div class="chips">
+        <button class="addlist" type="button" data-add="Cuticle oil">+ Cuticle oil</button>
+        <button class="addlist" type="button" data-add="Cuticle remover">+ Cuticle remover</button>
+        <button class="addlist" type="button" data-add="Cuticle pusher">+ Cuticle pusher</button>
+        <button class="addlist" type="button" data-add="Hand cream or hand mask">+ Hand cream / mask</button>
+      </div>
       <a class="btn ghost shop" data-c="nail-tools-1" href="#" target="_blank" rel="noopener">Shop nail care &amp; tools</a>
     </div>
   </article>
@@ -451,6 +463,21 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
       return '<div class="shade"><span class="dot" style="background:' + s[3] + '"></span>' + s[0] + ' ' + s[1] + ' <span class="small">(' + s[2] + ')</span></div>';
     }).join("");
   }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".addlist"); if (!b) return;
+    var v = b.getAttribute("data-add"), box = null;
+    document.querySelectorAll(".pick input").forEach(function (i) { if (i.value === v) box = i; });
+    if (!box) {
+      var l = document.createElement("label"); l.className = "pick";
+      box = document.createElement("input"); box.type = "checkbox"; box.value = v;
+      l.appendChild(box); l.appendChild(document.createTextNode(" " + (b.getAttribute("data-label") || v)));
+      document.querySelector(".picks").appendChild(l);
+    }
+    box.checked = !b.classList.contains("added");
+    b.classList.toggle("added", box.checked);
+    if (!b.dataset.orig) b.dataset.orig = b.textContent;
+    b.textContent = box.checked ? (b.closest(".chips") ? "\u2713 " + b.dataset.orig.replace(/^\+\s*/, "") : "\u2713 Added to your list") : b.dataset.orig;
+  });
   function addNote(text) {
     var n = document.getElementById("c-notes");
     n.value = (n.value ? n.value + "\n" : "") + text;

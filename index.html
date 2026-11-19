@@ -122,6 +122,10 @@ details.tool summary { font-family: var(--display); text-transform: uppercase; l
 .starter img { width: 120px; height: auto; border-radius: 10px; }
 .starter div { display: grid; gap: 6px; min-width: 0; }
 .starter b.tag { font-family: var(--display); text-transform: uppercase; letter-spacing: .06em; color: var(--pink-ink); font-size: 13px; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.addlist { font: inherit; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; border: 2px dashed var(--pink); background: transparent; color: var(--pink-ink); cursor: pointer; }
+.addlist.added { border-style: solid; background: var(--blush); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .starter p { margin: 0; color: var(--ink); font-size: 14px; }
 @media (max-width: 380px) { .starter { grid-template-columns: 1fr; } .starter img { width: 100%; } }
 footer { text-align: center; font-size: 12px; color: var(--muted); }
@@ -171,7 +175,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
         <div>
           <b class="tag">New to Nail Dashes? Start here</b>
           <p><b>Nail Dash Glue Application Bundle:</b> brush-on glue, a full-size file, nail primer and prep pads. It's everything you need for 10+ days of wear.</p>
-          <a class="btn" data-p="nail-dash-glue-application-bundle" href="#" target="_blank" rel="noopener">Add the starter kit</a>
+          <div class="btnrow"><a class="btn" data-p="nail-dash-glue-application-bundle" href="#" target="_blank" rel="noopener">Shop the starter kit</a><button class="addlist" type="button" data-add="Nail starter kit (glue bundle)">+ Add to my list</button></div>
         </div>
       </div>
       <a class="btn shop" data-c="all-nail-dashes" href="#" target="_blank" rel="noopener">Shop Nail Dashes</a>
@@ -447,6 +451,21 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
       return '<div class="shade"><span class="dot" style="background:' + s[3] + '"></span>' + s[0] + ' ' + s[1] + ' <span class="small">(' + s[2] + ')</span></div>';
     }).join("");
   }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".addlist"); if (!b) return;
+    var v = b.getAttribute("data-add"), box = null;
+    document.querySelectorAll(".pick input").forEach(function (i) { if (i.value === v) box = i; });
+    if (!box) {
+      var l = document.createElement("label"); l.className = "pick";
+      box = document.createElement("input"); box.type = "checkbox"; box.value = v;
+      l.appendChild(box); l.appendChild(document.createTextNode(" " + (b.getAttribute("data-label") || v)));
+      document.querySelector(".picks").appendChild(l);
+    }
+    box.checked = !b.classList.contains("added");
+    b.classList.toggle("added", box.checked);
+    if (!b.dataset.orig) b.dataset.orig = b.textContent;
+    b.textContent = box.checked ? (b.closest(".chips") ? "\u2713 " + b.dataset.orig.replace(/^\+\s*/, "") : "\u2713 Added to your list") : b.dataset.orig;
+  });
   function addNote(text) {
     var n = document.getElementById("c-notes");
     n.value = (n.value ? n.value + "\n" : "") + text;
