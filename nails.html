@@ -69,6 +69,12 @@ h1 .script { font-family: var(--script); text-transform: none; color: var(--pink
 .join h2 { font-family: var(--display); text-transform: uppercase; margin: 0; font-size: 28px; line-height: 1.1; }
 .join h2 .script { font-family: var(--script); text-transform: none; color: var(--pink); font-size: 1.3em; }
 .join p { margin: 0; opacity: .85; }
+.tiers { width: 100%; max-width: 420px; margin: 0 auto; border-collapse: collapse; font-size: 14px; }
+.tiers caption { font-family: var(--display); text-transform: uppercase; letter-spacing: .06em; color: var(--pink); font-size: 13px; padding-bottom: 6px; }
+.join .small { color: var(--bg); opacity: .75; }
+.tiers th, .tiers td { color: var(--bg); text-align: center; padding: 7px 6px; border-bottom: 1px solid rgba(255,255,255,.18); }
+.tiers th { font-weight: 600; font-size: 12px; opacity: .8; }
+.tiers td:last-child { color: var(--gold); font-weight: 700; }
 .join .contact { font-weight: 700; color: var(--gold); user-select: all; }
 
 details.tool { border: 2px dashed var(--line); border-radius: 14px; padding: 14px 16px; background: var(--surface); }
@@ -358,7 +364,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
       <ol>
         <li><b>Shop!</b> Every order through this page counts toward <span class="hostRef">Jessica</span>'s free product.</li>
         <li><b>Host your own.</b> Booking your own party earns <span class="hostRef">Jessica</span> extra freebies, and you get to shop with your rewards. The average host earns $75 to $100 in free product! Message <span class="baFirst">Karli</span> to grab a date.</li>
-        <li><b>Get your own link.</b> Save up to 35% on your own purchases. Each person who joins unlocks an extra set of nails for <span class="hostRef">Jessica</span>!</li>
+        <li><b>Share this page.</b> Send it to a friend who'd love Nail Dashes. Their orders count toward <span class="hostRef">Jessica</span>'s rewards too!</li>
       </ol>
     </div>
   </section>
@@ -386,7 +392,18 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
 
   <section class="join">
     <h2>Want free product? <span class="script">Host your own</span></h2>
-    <p>Share your own shopping link with friends for a week, and every order earns you free product. The average host earns $75 to $100 in freebies! No party to throw and no pressure: just share and shop.</p>
+    <p>Share your own shopping link with friends for a week, and every order earns you product credit. The average host earns $75 to $100 in freebies! No party to throw and no pressure: just share and shop.</p>
+    <table class="tiers">
+      <caption>Pop-up product credit</caption>
+      <thead><tr><th scope="col">Pop-up sales</th><th scope="col">You earn</th><th scope="col">Product credit</th></tr></thead>
+      <tbody>
+        <tr><td>$100&ndash;349</td><td>10%</td><td>$10&ndash;34</td></tr>
+        <tr><td>$350&ndash;499</td><td>12%</td><td>$42&ndash;59</td></tr>
+        <tr><td>$500&ndash;999</td><td>14%</td><td>$70&ndash;139</td></tr>
+        <tr><td>$1,000+</td><td>16%</td><td>$160+</td></tr>
+      </tbody>
+    </table>
+    <p class="small">Example: friends spend $400 on your pop-up, so you get 12% back, which is $48 to shop with.</p>
     <p>To grab a date, message <span class="contact" id="baName">Karli</span> on Facebook.</p>
   </section>
 
@@ -400,7 +417,7 @@ footer { text-align: center; font-size: 12px; color: var(--muted); }
         <input id="f-link" type="url" value="https://redaspenlove.com/collections/mascara-eyeliner?pws=KarliJean&amp;party=NovemberVIPs" placeholder="Paste her pop-up link" autocomplete="off">
       </label>
       <p class="small" id="linkWarn" hidden style="color:#b0306e"><b>This link doesn't include a party or shop code, so the buttons can't take shoppers to the right pages.</b> If it's a short link, open it in your browser, then copy the full address from the address bar (it should contain "party=" or look like redaspenlove.com/party/HostessName) and paste that here.</p>
-      <label for="f-ba">Your name (shown in "Get your own link")
+      <label for="f-ba">Your name (shown in "Host your own")
         <input id="f-ba" type="text" value="Karli" autocomplete="off">
       </label>
       <label for="f-msgr">Your Messenger username (from facebook.com/<b>username</b>)
